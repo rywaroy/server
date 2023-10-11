@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const initRouter = require('./prompt/router');
 const resultMiddleware = require('./middleware/result');
-const blogRouter = require('./blog/router');
+const initBlogRouter = require('./blog/router');
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(resultMiddleware);
 
 // 路由
 initRouter(app);
-app.use('/blog', blogRouter);
+initBlogRouter(app);
 
 // 启动服务器
 app.listen(3000, () => {

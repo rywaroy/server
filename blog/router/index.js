@@ -7,12 +7,8 @@ const album = require('./album');
 const base = require('./base');
 
 const router = express.Router();
-router.use('/api/article', article);
-router.use('/api/admin', admin);
-router.use('/api/album', album);
-router.use('/api/base', base);
 
-router.get('/blog/admin', async (req, res) => {
+router.get('/admin', async (req, res) => {
     const htmlFile = await (new Promise((resolve, reject) => {
         fs.readFile(path.join(__dirname, '../', './admin/index.html'), (err, data) => {
             if (err) {
@@ -26,7 +22,7 @@ router.get('/blog/admin', async (req, res) => {
     res.send(htmlFile);
 });
 
-router.get('/blog/', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     if (req.path.indexOf('api') > -1) {
         next();
     } else {
@@ -46,7 +42,7 @@ router.get('/blog/', async (req, res, next) => {
     }
 });
 
-router.get('/blog/*', async (req, res, next) => {
+router.get('*', async (req, res, next) => {
     if (res.statusCode === 404 && req.path.indexOf('api') === -1) {
         const deviceAgent = req.headers['user-agent'].toLowerCase();
         const agentID = deviceAgent.match(/(iphone|ipod|ipad|android)/);
@@ -66,4 +62,12 @@ router.get('/blog/*', async (req, res, next) => {
     }
 });
 
-module.exports = router;
+function initBlogRouter(app) {
+    app.use('/blog/api/article', article);
+    app.use('/blog/api/admin', admin);
+    app.use('/blog/api/album', album);
+    app.use('/blog/api/base', base);
+    app.use('/blog', router);
+}
+
+module.exports = initBlogRouter;
