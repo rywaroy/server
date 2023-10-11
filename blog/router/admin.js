@@ -31,3 +31,5 @@ router.post('/login', async (req, res) => {
     data.token = token;
     res.success(200, '登录成功', data);
 });
+
+module.exports = router;
